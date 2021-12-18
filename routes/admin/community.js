@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const {imagesCommunity,createCommunity,updateCommunity,getCommunityAll,deleteCommunity,getCommunityById,addarrayCommunity
+    ,onePersonTrace
 } = require("../../controllers/admin/community");
 
 // const { usdiqdmiddleware} = require("../controllers/products");
@@ -16,7 +17,7 @@ router.post('/community/add/:userid',requireSignin,isAuth,isAdmin,createCommunit
 router.put('/community/update/:id/:userid',requireSignin,isAuth,isAdmin,updateCommunity)
 router.get('/community/update/:id/:userid',requireSignin,isAuth,isAdmin,getCommunityById)
 router.post('/community/addarray',addarrayCommunity)
-// router.get('/subcategories/:categoryid',getSubCate)
+router.get('/community/trace/:id/:userid',onePersonTrace)
 // router.get('/classcategories/:subcateid', getClassCate)
 // router.get('/products/main/:categoryid',usdiqdmiddleware,getMainProducts)
 // router.get('/products/sub/:subcateid',usdiqdmiddleware,getSubProducts)
