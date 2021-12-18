@@ -12,6 +12,131 @@ var jwt = require('jsonwebtoken');
 
 //adding array of community list by using xlsx file
 //completed successfuly done 
+exports.onePersonTrace = (req,res,next)=>{
+    console.log('reached controoler')
+        console.log('params: ',req.params.id)
+        communityid=req.params.id
+        community=[]
+        trainings=[]
+        events=[]
+        interns=[]
+        successstories=[]
+        startups=[]
+        instructors=[]
+        speakers=[]
+        recommendations=[]
+        certificates=[]
+        con.query('SELECT * FROM trainings LEFT JOIN trainingsstudents ON trainings.trainingid = trainingsstudents.trainingid WHERE trainingsstudents.communityid = ?',[communityid],
+        function(err,rows,fields){
+            if(err){
+                res.status(400).json({
+                    error : err
+                });
+            }else{
+                trainings=rows
+                con.query('SELECT * FROM trainings LEFT JOIN traininginstructors ON trainings.trainingid = traininginstructors.trainingid WHERE traininginstructors.communityid = ?',[communityid],
+        function(err,rows,fields){
+            if(err){
+                res.status(400).json({
+                    error : err
+                });
+            }else{
+                instructors=rows
+                con.query('SELECT * FROM events LEFT JOIN eventattendees ON events.eventid = eventattendees.eventid WHERE eventattendees.communityid = ?',[communityid],
+                function(err,rows,fields){
+                    
+                    if(err){
+                        res.status(400).json({
+                            error : err
+                        });
+                    }else{
+                        events=rows
+                        con.query('SELECT * FROM events LEFT JOIN eventspeakers ON events.eventid = eventspeakers.eventid WHERE eventspeakers.communityid = ?',[communityid],
+                        function(err,rows,fields){
+                        if(err){
+                            res.status(400).json({
+                                error : err
+                            });
+                        }else{
+                        speakers=rows
+                        con.query('SELECT * FROM trainings LEFT JOIN certificates ON trainings.trainingid = certificates.trainingid WHERE certificates.communityid = ?',[communityid],
+                        function(err,rows,fields){
+                        if(err){
+                            res.status(400).json({
+                                error : err
+                            });
+                        }else{
+                            certificates=rows
+                            con.query('SELECT * FROM interns WHERE communityid = ?',[communityid],
+                            function(err,rows,fields){
+                                if(err){
+                                    res.status(400).json({
+                                        error : err
+                                    });
+                                }else{
+                                    interns=rows
+                                    con.query('SELECT * FROM startups WHERE communityid = ?',[communityid],
+                                    function(err,rows,fields){
+                                        if(err){
+                                            res.status(400).json({
+                                                error : err
+                                            });
+                                        }else{
+                                            startups=rows
+                                            con.query('SELECT * FROM successstories WHERE communityid = ?',[communityid],
+                                            function(err,rows,fields){
+                                                if(err){
+                                                    res.status(400).json({
+                                                        error : err
+                                                    });
+                                                }else{
+                                                    successstories=rows
+                                                    con.query('SELECT * FROM recommendations WHERE communityid = ?',[communityid],
+                                            function(err,rows,fields){
+                                                if(err){
+                                                    res.status(400).json({
+                                                        error : err
+                                                    });
+                                                }else{
+                                                    recommandations=rows
+                                                    con.query('SELECT * FROM community WHERE communityid = ?',[communityid],
+                                            function(err,rows,fields){
+                                                if(err){
+                                                    res.status(400).json({
+                                                        error : err
+                                                    });
+                                                }else{
+                                                    community=rows[0]
+                                                        res.status(200).json({
+                                                            community,trainings,speakers,events,instructors,certificates,recommendations,successstories,interns,startups
+                                                        })
+                                                }
+                                            })
+                                                }
+                                            })
+                                                }
+                                            })
+                                        }
+                                    })
+                                }
+                            })
+                    }
+                })
+                    }
+                })
+                    }
+                })
+            }
+        })
+                
+            }
+        })
+    
+}
+
+
+//adding array of community list by using xlsx file
+//completed successfuly done 
 exports.addarrayCommunity = (req,res,next)=>{
     communityArray = req.body;
     for(let i=0;i<communityArray.length;i++){
